@@ -28,10 +28,14 @@
       <tbody>
       <tr *ngFor="let name of codeNames" style="text-align: center">
         <td style="font-weight: bold">{{name}}</td>
-        <td *ngFor="let name of codeNames" contenteditable="true"></td>
+        <td class="matrix-cell" *ngFor="let name of codeNames" contenteditable="true"></td>
       </tr>
       </tbody>
     </table>
+  </div>
+
+  <div>
+    <button class="btn btn-primary btn-lg mt-4" type="submit" (click)="predictCommunications()">Спрогнозувати розвиток</button>
   </div>
 </div>
 

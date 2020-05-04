@@ -9,7 +9,7 @@ export class AppComponent {
 
   public isInputtingData = false;
   public isShowingTable = false;
-  public numberOfUsers = 20;
+  public numberOfUsers;
   public codeNames;
 
   generateArrayOfNumbers() {
@@ -33,7 +33,7 @@ export class AppComponent {
     let inputElement = document.getElementById("inputNumUsers");
     let inputValue = (<HTMLInputElement>inputElement).value;
 
-    if (AppComponent.isNumberMoreThan3(inputValue)) {
+    if (AppComponent.isNumberMoreThan2(inputValue)) {
       this.numberOfUsers = parseInt(inputValue);
       this.codeNames = this.generateArrayOfNumbers();
 
@@ -44,19 +44,64 @@ export class AppComponent {
       inputElement.setAttribute("class", "form-control blinking");
       buttonElement.setAttribute("class", "btn btn-outline-secondary blinking");
 
-        setTimeout(() => {
-          inputElement.setAttribute("class", "form-control");
-          buttonElement.setAttribute("class", "btn btn-outline-secondary");
-        }, 2000);
+      setTimeout(() => {
+        inputElement.setAttribute("class", "form-control");
+        buttonElement.setAttribute("class", "btn btn-outline-secondary");
+      }, 2000);
     }
   }
 
-  private static isNumberMoreThan3(number: string): boolean {
-    if (/^-?[\d.]+(?:e-?\d+)?$/.test(number)) {
-      return parseInt(number) >= 3;
+  predictCommunications() {
+    let cells = document.getElementsByClassName("matrix-cell");
+
+    let relationsMatrix = [];
+    let row = [];
+    let counter = 0;
+    for (let i = 0; i < cells.length; i++) {
+      row.push(cells.item(i).textContent);
+      counter++;
+
+      if (counter === this.numberOfUsers) {
+        counter = 0;
+        relationsMatrix.push(row);
+        row = [];
+      }
     }
 
-    return false;
+    if (AppComponent.validateMatrix(relationsMatrix)) {
+      console.log(JSON.stringify(relationsMatrix));
+    }
+  }
+
+  private static validateMatrix(matrix: Array<Array<any>>): boolean {
+    for (let i = 0; i < matrix.length; i++) {
+      for (let j = 0; j < matrix[i].length; j++) {
+        let element = matrix[i][j];
+        if (element === "") {
+          continue;
+        }
+
+        if (!AppComponent.isNumber(element)) {
+          return false;
+        }
+
+        let number = parseInt(element);
+        if (number !== 0 && number !== 1 && number !== -1) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
+
+
+  private static isNumberMoreThan2(number: string): boolean {
+    return AppComponent.isNumber(number) && parseInt(number) >= 3;
+  }
+
+  private static isNumber(number: string): boolean {
+    return /^-?[\d.]+(?:e-?\d+)?$/.test(number);
   }
 
   private static generateCodeName(codeName) {
