@@ -1,0 +1,20 @@
+.title {
+  font-size: 24px;
+  text-align: center;
+}
+
+.subject {
+  font-weight: bold;
+  font-size: 38px;
+}
+
+.blinking{
+  animation:blinkingText 0.3s infinite;
+}
+@keyframes blinkingText{
+  0%{     color: #000;    }
+  49%{    color: #000; }
+  60%{    color: red; }
+  99%{    color: red;  }
+  100%{   color: #000;    }
+}
