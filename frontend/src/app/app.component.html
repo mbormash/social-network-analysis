@@ -10,7 +10,8 @@
 </div>
 <div *ngIf="isInputtingData">
   <div class="input-group ml-5 mt-4" style="max-width: 300px;">
-    <input id="inputNumUsers" type="text" class="form-control" placeholder="Кількість користувачів (мін. 3)" aria-label="Кількість користувачів (мін. 3)"
+    Введіть кількість користувачів соціальної мережі. Це повинне бути число не менше 3.
+    <input id="inputNumUsers" type="text" class="form-control" placeholder="Кількість користувачів" aria-label="Кількість користувачів (мін. 3)"
            aria-describedby="basic-addon2">
     <div class="input-group-append">
       <button id="showTable" class="btn btn-outline-secondary" type="button" (click)="showTable()">Далі</button>
@@ -18,6 +19,8 @@
   </div>
 
   <div class="table-responsive mt-4" *ngIf="isShowingTable">
+    <p class="ml-3">Заповніть матрицю відносин. Элементи повинні набувати значень 1, 0, -1 чи не набувати ніякого.</p>
+    <p class="ml-3">Матриця повинна бути симметричною, діагональні элементи не повинні містити ніяких значень.</p>
     <table class="table table-bordered">
       <thead>
       <tr>
@@ -34,7 +37,7 @@
     </table>
   </div>
 
-  <div>
+  <div *ngIf="isShowingTable">
     <button class="btn btn-primary btn-lg mt-4" type="submit" (click)="predictCommunications()">Спрогнозувати розвиток</button>
   </div>
 </div>
