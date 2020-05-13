@@ -1,4 +1,4 @@
-package bormashenko.michael.socialnetworkanalysis.contoller;
+package bormashenko.michael.socialnetworkanalysis.controller;
 
 import bormashenko.michael.socialnetworkanalysis.repo.SocialNetworkUser;
 import bormashenko.michael.socialnetworkanalysis.service.SocialNetworkAnalysisService;
@@ -20,7 +20,6 @@ public class SocialNetworkAnalysisController {
    private SocialNetworkAnalysisService socialNetworkAnalysisService;
 
    @GetMapping(value = "/users", consumes = MediaType.APPLICATION_JSON_VALUE)
-//   @CrossOrigin(origins = ORIGIN_URL)
    public List<SocialNetworkUser> getUsers() {
       return socialNetworkAnalysisService.getUsers();
    }

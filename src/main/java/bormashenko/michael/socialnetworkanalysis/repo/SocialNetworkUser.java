@@ -26,6 +26,6 @@ public class SocialNetworkUser implements Serializable {
    private String codeName;
 
    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-   private List<UsersRelation> relations;
+   private List<UserRelation> relations;
 
 }

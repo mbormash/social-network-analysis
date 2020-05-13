@@ -1,20 +1,18 @@
 package bormashenko.michael.socialnetworkanalysis.repo;
 
 import bormashenko.michael.socialnetworkanalysis.service.Relation;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 @Builder
-public class UsersRelation implements Serializable {
+public class UserRelation implements Serializable {
 
    private static final long serialVersionUID = -8913192462710591280L;
 
@@ -34,4 +32,14 @@ public class UsersRelation implements Serializable {
    @Enumerated(EnumType.STRING)
    @Column
    private Relation relation;
+
+   @Override
+   public String toString() {
+      return "UserRelation{" +
+            "id=" + id +
+            ", userCodeName='" + userCodeName + '\'' +
+            ", anotherUserCodeName='" + anotherUserCodeName + '\'' +
+            ", relation=" + relation +
+            '}';
+   }
 }
