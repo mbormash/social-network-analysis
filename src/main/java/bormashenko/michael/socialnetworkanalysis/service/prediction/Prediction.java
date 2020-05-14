@@ -9,4 +9,6 @@ public interface Prediction {
 
    Integer[][] predict(Integer[][] relationMatrix);
 
+   boolean shouldConnect(Integer[] xRelations, Integer[] yRelations);
+
 }

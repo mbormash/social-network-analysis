@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Slf4j
 public class Util {
@@ -21,6 +22,10 @@ public class Util {
                }
             }
          }
+      }
+
+      public static boolean getRandomBooleanWithProbability(double p) {
+         return new Random().nextDouble() < p;
       }
 
       public static boolean isRelationMatrixValid(Integer[][] matrix) {

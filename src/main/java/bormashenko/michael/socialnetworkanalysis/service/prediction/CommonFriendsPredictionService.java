@@ -4,10 +4,8 @@ import bormashenko.michael.socialnetworkanalysis.exception.SNAnalysisException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Random;
 
-import static bormashenko.michael.socialnetworkanalysis.service.Util.CalculationUtil.isRelationMatrixValid;
-import static bormashenko.michael.socialnetworkanalysis.service.Util.CalculationUtil.normalizeMatrixByX;
+import static bormashenko.michael.socialnetworkanalysis.service.Util.CalculationUtil.*;
 
 
 @Slf4j
@@ -31,7 +29,6 @@ public class CommonFriendsPredictionService implements Prediction {
          throw new SNAnalysisException("Not a valid relation matrix! Should be symmetric and diagonal elements should be null.");
       }
 
-      boolean smallNetwork = relationMatrix.length <= SMALL_NETWORK;
       Integer[][] predictedRelations = new Integer[relationMatrix.length][relationMatrix.length];
 
       for (int i = 0; i < relationMatrix.length; i++) {
@@ -49,9 +46,9 @@ public class CommonFriendsPredictionService implements Prediction {
                continue;
             }
 
-            int commonFriends = calculateCommonFriends(xRelations, relationMatrix[j]);
+            Integer[] yRelations = relationMatrix[j];
 
-            if (shouldConnect(commonFriends, smallNetwork)) {
+            if (shouldConnect(xRelations, yRelations)) {
                predictedXRelations[j] = POSITIVE_RELATION;
             } else {
                predictedXRelations[j] = NEUTRAL_RELATION;
@@ -65,7 +62,15 @@ public class CommonFriendsPredictionService implements Prediction {
       return predictedRelations;
    }
 
-   private int calculateCommonFriends(Integer[] xUserRelations, Integer[] yUserRelations) {
+   @Override
+   public boolean shouldConnect(Integer[] xRelations, Integer[] yRelations) {
+      boolean smallNetwork = xRelations.length <= SMALL_NETWORK;
+      int commonFriends = calculateCommonFriends(xRelations, yRelations);
+
+      return shouldConnect(commonFriends, smallNetwork);
+   }
+
+   protected int calculateCommonFriends(Integer[] xUserRelations, Integer[] yUserRelations) {
       int commonFriends = 0;
       for (int i = 0; i < xUserRelations.length; i++) {
          if (xUserRelations[i] != null && xUserRelations[i].equals(POSITIVE_RELATION) &&
@@ -77,7 +82,7 @@ public class CommonFriendsPredictionService implements Prediction {
       return commonFriends;
    }
 
-   private boolean shouldConnect(long commonFriends, boolean smallNetwork) {
+   private boolean shouldConnect(int commonFriends, boolean smallNetwork) {
       if (smallNetwork) {
          return shouldConnectInSmallNetwork(commonFriends);
       }
@@ -94,7 +99,7 @@ public class CommonFriendsPredictionService implements Prediction {
       return getRandomBooleanWithProbability(probability);
    }
 
-   private boolean shouldConnectInSmallNetwork(long commonFriends) {
+   private boolean shouldConnectInSmallNetwork(int commonFriends) {
       if (commonFriends >= SMALL_NETWORK_COMMON_FRIENDS_BOUND_MAX_PROBABILITY) {
          return true;
       }
@@ -105,10 +110,6 @@ public class CommonFriendsPredictionService implements Prediction {
 
       double probability = commonFriends * SMALL_NETWORK_EACH_COMMON_FRIEND_PROBABILITY;
       return getRandomBooleanWithProbability(probability);
-   }
-
-   private boolean getRandomBooleanWithProbability(double p) {
-      return new Random().nextDouble() < p;
    }
 
 }
