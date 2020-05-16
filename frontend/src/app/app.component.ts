@@ -1,4 +1,6 @@
 import {Component} from '@angular/core';
+import APP_CONFIG from './app.config';
+import {Node, Link} from './d3';
 
 @Component({
   selector: 'app-root',
@@ -7,10 +9,34 @@ import {Component} from '@angular/core';
 })
 export class AppComponent {
 
-  public isInputtingData = false;
-  public isShowingTable = false;
-  public numberOfUsers;
-  public codeNames;
+  nodes: Node[] = [];
+  links: Link[] = [];
+
+  isInputtingData = false;
+  isShowingTable = false;
+  numberOfUsers;
+  codeNames;
+
+  constructor() {
+    const N = APP_CONFIG.N,
+      getIndex = number => number - 1;
+
+    /** constructing the nodes array */
+    for (let i = 1; i <= N; i++) {
+      this.nodes.push(new Node(i));
+    }
+
+    for (let i = 1; i <= N; i++) {
+      for (let m = 2; i * m <= N; m++) {
+        /** increasing connections toll on connecting nodes */
+        this.nodes[getIndex(i)].linkCount++;
+        this.nodes[getIndex(i * m)].linkCount++;
+
+        /** connecting the nodes before starting the simulation */
+        this.links.push(new Link(i, i * m));
+      }
+    }
+  }
 
   generateArrayOfNumbers() {
     let codeName = "@";
@@ -69,7 +95,7 @@ export class AppComponent {
     }
 
     if (AppComponent.validateMatrix(relationsMatrix)) {
-      console.log(JSON.stringify(relationsMatrix));
+      console.log(JSON.stringify({matrix: relationsMatrix}));
     }
   }
 
@@ -131,4 +157,5 @@ export class AppComponent {
 
     return codeName.substring(0, codeName.length - 1) + lastChar;
   }
+
 }
