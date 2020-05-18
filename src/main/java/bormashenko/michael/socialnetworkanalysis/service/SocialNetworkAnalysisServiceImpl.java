@@ -4,6 +4,7 @@ import bormashenko.michael.socialnetworkanalysis.exception.SNAnalysisException;
 import bormashenko.michael.socialnetworkanalysis.repo.SocialNetworkUser;
 import bormashenko.michael.socialnetworkanalysis.repo.UserRelation;
 import bormashenko.michael.socialnetworkanalysis.repo.UserRepository;
+import bormashenko.michael.socialnetworkanalysis.service.prediction.Prediction;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -78,6 +79,11 @@ public class SocialNetworkAnalysisServiceImpl implements SocialNetworkAnalysisSe
    @Override
    public List<SocialNetworkUser> createUsersByRelations(Integer[][] relationMatrix) {
       return convertMatrixToUserList(relationMatrix);
+   }
+
+   @Override
+   public Integer[][] predictRelations(Integer[][] relationMatrix, Prediction prediction) {
+      return prediction.predict(relationMatrix);
    }
 
    private List<SocialNetworkUser> createDefaultUsers() {
