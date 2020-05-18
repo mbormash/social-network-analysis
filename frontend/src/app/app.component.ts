@@ -1,5 +1,4 @@
-import {Component} from '@angular/core';
-import APP_CONFIG from './app.config';
+import {ChangeDetectorRef, Component} from '@angular/core';
 import {Node, Link} from './d3';
 
 @Component({
@@ -9,34 +8,19 @@ import {Node, Link} from './d3';
 })
 export class AppComponent {
 
+
+  constructor(private changeDetector: ChangeDetectorRef) {
+  }
+
   nodes: Node[] = [];
   links: Link[] = [];
 
   isInputtingData = false;
   isShowingTable = false;
+  isShowingGraphs = false;
+
   numberOfUsers;
   codeNames;
-
-  constructor() {
-    const N = APP_CONFIG.N,
-      getIndex = number => number - 1;
-
-    /** constructing the nodes array */
-    for (let i = 1; i <= N; i++) {
-      this.nodes.push(new Node(i));
-    }
-
-    for (let i = 1; i <= N; i++) {
-      for (let m = 2; i * m <= N; m++) {
-        /** increasing connections toll on connecting nodes */
-        this.nodes[getIndex(i)].linkCount++;
-        this.nodes[getIndex(i * m)].linkCount++;
-
-        /** connecting the nodes before starting the simulation */
-        this.links.push(new Link(i, i * m));
-      }
-    }
-  }
 
   generateArrayOfNumbers() {
     let codeName = "@";
@@ -52,6 +36,7 @@ export class AppComponent {
 
     if (!this.isInputtingData) {
       this.isShowingTable = false;
+      this.isShowingGraphs = false;
     }
   }
 
@@ -78,6 +63,11 @@ export class AppComponent {
   }
 
   predictCommunications() {
+    this.isShowingGraphs = false;
+    this.changeDetector.detectChanges();
+    this.nodes = [];
+    this.links = [];
+
     let cells = document.getElementsByClassName("matrix-cell");
 
     let relationsMatrix = [];
@@ -95,7 +85,23 @@ export class AppComponent {
     }
 
     if (AppComponent.validateMatrix(relationsMatrix)) {
-      console.log(JSON.stringify({matrix: relationsMatrix}));
+      let codeName = "@";
+      for (let i = 0; i < relationsMatrix.length; i++) {
+        codeName = AppComponent.generateCodeName(codeName);
+        this.nodes.push(new Node(i, codeName));
+      }
+
+      for (let i = 0; i < relationsMatrix.length; i++) {
+        for (let j = 0; j < relationsMatrix[i].length; j++) {
+          if (relationsMatrix[i][j] === "1") {
+            this.links.push(new Link(i, j));
+          }
+        }
+      }
+
+      this.isShowingGraphs = true;
+
+      let request = JSON.stringify({matrix: relationsMatrix});
     }
   }
 

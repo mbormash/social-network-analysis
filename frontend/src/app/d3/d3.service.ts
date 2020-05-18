@@ -1,5 +1,5 @@
-import { Injectable, EventEmitter } from '@angular/core';
-import { Node, Link, ForceDirectedGraph } from './models';
+import {Injectable} from '@angular/core';
+import {ForceDirectedGraph, Link, Node} from './models';
 import * as d3 from 'd3';
 
 @Injectable()
@@ -19,7 +19,7 @@ export class D3Service {
     zoomed = () => {
       const transform = d3.event.transform;
       container.attr('transform', 'translate(' + transform.x + ',' + transform.y + ') scale(' + transform.k + ')');
-    }
+    };
 
     zoom = d3.zoom().on('zoom', zoomed);
     svg.call(zoom);
@@ -62,7 +62,6 @@ export class D3Service {
    * This method does not interact with the document, purely physical calculations with d3
    */
   getForceDirectedGraph(nodes: Node[], links: Link[], options: { width, height }) {
-    const sg = new ForceDirectedGraph(nodes, links, options);
-    return sg;
+    return new ForceDirectedGraph(nodes, links, options);
   }
 }

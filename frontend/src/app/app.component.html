@@ -40,8 +40,9 @@
   <div *ngIf="isShowingTable">
     <button class="btn btn-primary btn-lg mt-4" type="submit" (click)="predictCommunications()">Спрогнозувати розвиток</button>
   </div>
+
+  <div *ngIf="isShowingGraphs" class="graph">
+    <graph [nodes]="nodes" [links]="links"></graph>
+  </div>
 </div>
 
-<div class="graph">
-  <graph [nodes]="nodes" [links]="links"></graph>
-</div>
