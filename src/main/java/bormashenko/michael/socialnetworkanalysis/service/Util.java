@@ -125,13 +125,32 @@ public class Util {
 
       private static String incrementCodeNameLength(String codeName) {
          int length = codeName.length();
+         StringBuilder newCodeName = new StringBuilder();
+         int notZIndex = -1;
 
-         StringBuilder builder = new StringBuilder(length + 1);
-         for (int i = 0; i < length + 1; i++) {
-            builder.append("A");
+         for (int i = length - 1; i >= 0; i--) {
+            if (codeName.charAt(i) != 'Z') {
+               notZIndex = i;
+               break;
+            }
          }
 
-         return builder.toString();
+         if (notZIndex != -1) {
+            newCodeName = new StringBuilder(codeName.substring(0, notZIndex));
+            char charToChange = codeName.charAt(notZIndex);
+            charToChange++;
+            newCodeName.append(charToChange);
+
+            for (int i = notZIndex + 1; i < length; i++) {
+               newCodeName.append('A');
+            }
+         } else {
+            for (int i = 0; i < length + 1; i++) {
+               newCodeName.append("A");
+            }
+         }
+
+         return newCodeName.toString();
       }
 
       private static String incrementLastChar(String codeName) {

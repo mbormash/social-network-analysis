@@ -143,9 +143,26 @@ export class AppComponent {
   private static incrementCodeNameLength(codeName) {
     let length = codeName.length;
     let newCodeName = "";
+    let notZIndex = -1;
 
-    for (let i = 0; i < length + 1; i++) {
-      newCodeName += "A";
+    for (let i = length - 1; i >= 0; i--) {
+      if (codeName.charAt(i) !== 'Z') {
+        notZIndex = i;
+        break;
+      }
+    }
+
+    if (notZIndex !== -1) {
+      newCodeName = codeName.substring(0, notZIndex);
+      newCodeName += this.incrementChar(codeName.charAt(notZIndex));
+
+      for (let i = notZIndex + 1; i < length; i++) {
+        newCodeName += 'A';
+      }
+    } else {
+      for (let i = 0; i < length + 1; i++) {
+        newCodeName += "A";
+      }
     }
 
     return newCodeName;
@@ -153,9 +170,13 @@ export class AppComponent {
 
   private static incrementLastChar(codeName) {
     let lastChar = codeName.charAt(codeName.length - 1);
-    lastChar = String.fromCharCode(lastChar.charCodeAt(0) + 1);
+    lastChar = this.incrementChar(lastChar);
 
     return codeName.substring(0, codeName.length - 1) + lastChar;
+  }
+
+  private static incrementChar(char) {
+    return String.fromCharCode(char.charCodeAt(0) + 1);
   }
 
 }

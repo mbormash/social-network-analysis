@@ -18,3 +18,8 @@
   99%{    color: red;  }
   100%{   color: #000;    }
 }
+
+.graph {
+  text-align: center;
+  margin-top: 10px;
+}

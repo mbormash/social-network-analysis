@@ -5,7 +5,7 @@ import { D3Service, ForceDirectedGraph, Node } from '../../d3';
   selector: 'graph',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <svg #svg [attr.width]="_options.width" [attr.height]="_options.height">
+    <svg #svg [attr.width]="_options.width" [attr.height]="_options.height" style="border: 3px solid black;">
       <g [zoomableOf]="svg">
         <g [linkVisual]="link" *ngFor="let link of links"></g>
         <g [nodeVisual]="node" *ngFor="let node of nodes"
@@ -23,7 +23,7 @@ export class GraphComponent implements OnInit, AfterViewInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    this.graph.initSimulation(this.options);
+    this.graph.initSimulation(this._options);
   }
 
 
@@ -31,7 +31,7 @@ export class GraphComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     /** Receiving an initialized simulated graph from our custom d3 service */
-    this.graph = this.d3Service.getForceDirectedGraph(this.nodes, this.links, this.options);
+    this.graph = this.d3Service.getForceDirectedGraph(this.nodes, this.links, this._options);
 
     /** Binding change detection check on each tick
      * This along with an onPush change detection strategy should enforce checking only when relevant!
@@ -44,13 +44,7 @@ export class GraphComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.graph.initSimulation(this.options);
+    this.graph.initSimulation(this._options);
   }
 
-  get options() {
-    return this._options = {
-      width: window.innerWidth,
-      height: window.innerHeight
-    };
-  }
 }
