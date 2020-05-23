@@ -11,13 +11,13 @@ public class ZhakkarPredictionService extends CommonFriendsPredictionService {
 
    @Override
    public boolean shouldConnect(Integer[] xRelations, Integer[] yRelations) {
-      int commonFriends = calculateCommonFriends(xRelations, yRelations);
-      int totalFriends = calculateTotalFriends(xRelations, yRelations);
+      double commonFriends = calculateCommonFriends(xRelations, yRelations);
+      double totalFriends = calculateTotalFriends(xRelations, yRelations);
 
       return shouldConnect(commonFriends, totalFriends);
    }
 
-   private int calculateTotalFriends(Integer[] xUserRelations, Integer[] yUserRelations) {
+   private double calculateTotalFriends(Integer[] xUserRelations, Integer[] yUserRelations) {
       int totalFriends = 0;
       for (int i = 0; i < xUserRelations.length; i++) {
          if (xUserRelations[i] != null && xUserRelations[i].equals(POSITIVE_RELATION)) {
@@ -32,7 +32,7 @@ public class ZhakkarPredictionService extends CommonFriendsPredictionService {
       return totalFriends - calculateCommonFriends(xUserRelations, yUserRelations);
    }
 
-   private boolean shouldConnect(int commonFriends, int totalFriends) {
-      return getRandomBooleanWithProbability((double)commonFriends / totalFriends);
+   private boolean shouldConnect(double commonFriends, double totalFriends) {
+      return getRandomBooleanWithProbability(commonFriends / totalFriends);
    }
 }
