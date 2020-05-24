@@ -1,9 +1,7 @@
 package bormashenko.michael.socialnetworkanalysis.controller;
 
-import bormashenko.michael.socialnetworkanalysis.repo.SocialNetworkUser;
 import bormashenko.michael.socialnetworkanalysis.service.SocialNetworkAnalysisService;
-import bormashenko.michael.socialnetworkanalysis.service.prediction.CommonFriendsPredictionService;
-import bormashenko.michael.socialnetworkanalysis.service.prediction.ZhakkarPredictionService;
+import bormashenko.michael.socialnetworkanalysis.service.prediction.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -25,5 +23,20 @@ public class SocialNetworkAnalysisPredictionController {
    @PostMapping(value = "/zhakkar", consumes = MediaType.APPLICATION_JSON_VALUE)
    public Integer[][] predictByZhakkar(@RequestParam Integer[][] matrix) {
       return socialNetworkAnalysisService.predictRelations(matrix, new ZhakkarPredictionService());
+   }
+
+   @PostMapping(value = "/adamic-adar", consumes = MediaType.APPLICATION_JSON_VALUE)
+   public Integer[][] predictByAdamicAdar(@RequestParam Integer[][] matrix) {
+      return socialNetworkAnalysisService.predictRelations(matrix, new AdamicAdarPredictionService());
+   }
+
+   @PostMapping(value = "/min-path-dijkstra", consumes = MediaType.APPLICATION_JSON_VALUE)
+   public Integer[][] predictByMinPathDijkstra(@RequestParam Integer[][] matrix) {
+      return socialNetworkAnalysisService.predictRelations(matrix, new MinPathByDijkstraPredictionService());
+   }
+
+   @PostMapping(value = "/hit-probability", consumes = MediaType.APPLICATION_JSON_VALUE)
+   public Integer[][] predictByHitProbability(@RequestParam Integer[][] matrix) {
+      return socialNetworkAnalysisService.predictRelations(matrix, new HitProbabilityPredictionService());
    }
 }
