@@ -3,7 +3,7 @@ package bormashenko.michael.socialnetworkanalysis.service.prediction;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import static bormashenko.michael.socialnetworkanalysis.service.Util.CalculationUtil.*;
+import static bormashenko.michael.socialnetworkanalysis.service.Util.Calculation.*;
 
 
 @Slf4j

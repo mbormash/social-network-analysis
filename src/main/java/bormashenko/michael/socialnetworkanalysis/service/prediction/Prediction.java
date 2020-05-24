@@ -3,7 +3,7 @@ package bormashenko.michael.socialnetworkanalysis.service.prediction;
 import bormashenko.michael.socialnetworkanalysis.exception.SNAnalysisException;
 import bormashenko.michael.socialnetworkanalysis.service.Relation;
 
-import static bormashenko.michael.socialnetworkanalysis.service.Util.CalculationUtil.isRelationMatrixValid;
+import static bormashenko.michael.socialnetworkanalysis.service.Util.Calculation.isRelationMatrixValid;
 
 public interface Prediction {
 

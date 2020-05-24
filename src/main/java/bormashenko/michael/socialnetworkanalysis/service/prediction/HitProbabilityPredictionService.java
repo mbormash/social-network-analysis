@@ -5,8 +5,8 @@ import bormashenko.michael.socialnetworkanalysis.exception.SNAnalysisException;
 import java.util.Arrays;
 import java.util.Random;
 
-import static bormashenko.michael.socialnetworkanalysis.service.Util.CalculationUtil.getRandomBooleanWithProbability;
-import static bormashenko.michael.socialnetworkanalysis.service.Util.CalculationUtil.normalizeMatrixByX;
+import static bormashenko.michael.socialnetworkanalysis.service.Util.Calculation.getRandomBooleanWithProbability;
+import static bormashenko.michael.socialnetworkanalysis.service.Util.Calculation.normalizeMatrixByX;
 
 public class HitProbabilityPredictionService implements Prediction {
 
@@ -56,6 +56,11 @@ public class HitProbabilityPredictionService implements Prediction {
          }
 
          int nextUserIndex = chooseRandomConnectedUserIndex(currentUser);
+
+         if (nextUserIndex == -1) {
+            return false;
+         }
+
          if (nextUserIndex == anotherUserIndex) {
             break;
          }
@@ -70,6 +75,11 @@ public class HitProbabilityPredictionService implements Prediction {
 
    private int chooseRandomConnectedUserIndex(Integer[] userRelations) {
       int numberOfFriends = Prediction.calculateFriends(userRelations);
+
+      if (numberOfFriends == 0) {
+         return -1;
+      }
+
       int randomUser = new Random().nextInt(numberOfFriends) + 1;
 
       int skippedUsers = 0;

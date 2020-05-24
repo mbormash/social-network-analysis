@@ -2,7 +2,6 @@ package bormashenko.michael.socialnetworkanalysis.service;
 
 import bormashenko.michael.socialnetworkanalysis.exception.SNAnalysisException;
 import bormashenko.michael.socialnetworkanalysis.repo.SocialNetworkUser;
-import bormashenko.michael.socialnetworkanalysis.repo.UserRelation;
 import bormashenko.michael.socialnetworkanalysis.repo.UserRepository;
 import bormashenko.michael.socialnetworkanalysis.service.prediction.Prediction;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.List;
 
 import static bormashenko.michael.socialnetworkanalysis.service.Util.Conversion.convertMatrixToUserList;
@@ -22,26 +20,26 @@ import static bormashenko.michael.socialnetworkanalysis.service.Util.Conversion.
 public class SocialNetworkAnalysisServiceImpl implements SocialNetworkAnalysisService {
 
    private static Integer[][] DEFAULT_USERS_RELATIONS = new Integer[][]{ //todo remove -1
-         {null, 1, 1, 0, 0, -1, 1, 1, -1, 0, 0, 0, -1, 1, 1, -1, 0, 0, -1, 0},
-         {1, null, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, -1, 1, 0, 1, 1, 0, 0},
-         {1, 1, null, -1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, -1, -1, 1, 1},
-         {0, 1, -1, null, -1, -1, 1, 0, 0, 1, 0, 0, 1, 1, -1, 1, 1, 0, 0, -1},
-         {0, 1, 1, -1, null, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, -1, -1, 1, 1},
-         {-1, 1, 0, -1, 1, null, 0, 0, 1, 0, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0},
-         {1, 1, 0, 1, 1, 0, null, -1, -1, 1, -1, 1, 1, 1, 1, 0, 0, 1, 1, 1},
-         {1, 0, 0, 0, 0, 0, -1, null, 1, 1, -1, -1, 1, 1, 1, 0, 1, 1, 1, 1},
-         {-1, 0, 0, 0, 0, 1, -1, 1, null, -1, 1, 1, -1, 1, 1, 0, 0, -1, -1, -1},
-         {0, 1, 1, 1, 0, 0, 1, 1, -1, null, 0, 1, 0, 0, -1, -1, 1, 1, 0, 0},
-         {0, 0, 1, 0, 0, -1, -1, -1, 1, 0, null, 0, 0, 1, 0, 1, 1, 1, 1, 1},
-         {0, 1, 0, 0, 0, -1, 1, -1, 1, 1, 0, null, -1, -1, 1, 1, 1, -1, -1, 1},
-         {-1, 1, 0, 1, 0, 1, 1, 1, -1, 0, 0, -1, null, 1, 1, -1, 1, 0, 0, 0},
-         {1, -1, 0, 1, 0, 0, 1, 1, 1, 0, 1, -1, 1, null, 1, -1, 1, 0, 0, 0},
-         {1, 1, 1, -1, 1, 0, 1, 1, 1, -1, 0, 1, 1, 1, null, -1, 1, 1, 1, 0},
-         {-1, 0, 1, 1, 1, 0, 0, 0, 0, -1, 1, 1, -1, -1, -1, null, 1, 1, 1, 1},
-         {0, 1, -1, 1, -1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, null, -1, 1, -1},
-         {0, 1, -1, 0, -1, 0, 1, 1, -1, 1, 1, -1, 0, 0, 1, 1, -1, null, 0, 1},
-         {-1, 0, 1, 0, 1, 0, 1, 1, -1, 0, 1, -1, 0, 0, 1, 1, 1, 0, null, 1},
-         {0, 0, 1, -1, 1, 0, 1, 1, -1, 0, 1, 1, 0, 0, 0, 1, -1, 1, 1, null}
+         {null, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0},
+         {1, null, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 0},
+         {1, 1, null, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1},
+         {0, 1, 0, null, 0, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0},
+         {0, 1, 1, 0, null, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1},
+         {1, 1, 0, 1, 1, null, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0},
+         {1, 1, 0, 1, 1, 0, null, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1},
+         {1, 0, 0, 0, 0, 0, 1, null, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1},
+         {1, 0, 0, 0, 0, 1, 0, 1, null, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1},
+         {0, 1, 1, 1, 0, 0, 1, 1, 1, null, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0},
+         {0, 0, 1, 0, 0, 1, 1, 1, 1, 0, null, 0, 0, 1, 0, 1, 1, 1, 1, 1},
+         {0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, null, 1, 0, 1, 1, 1, 0, 0, 1},
+         {0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, null, 1, 1, 0, 1, 0, 0, 0},
+         {1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, null, 1, 0, 1, 0, 0, 0},
+         {1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, null, 0, 1, 1, 1, 0},
+         {0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, null, 1, 1, 1, 1},
+         {0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, null, 0, 1, 1},
+         {0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, null, 0, 1},
+         {1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, null, 1},
+         {0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, null}
    };
 
    @Autowired

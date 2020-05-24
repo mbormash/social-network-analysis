@@ -18,7 +18,7 @@ public class Converter {
          for (int j = 0; j < matrixRow.length; j++) {
             if (matrixRow[j] != null && !matrixRow[j].equals(NEUTRAL_RELATION)) {
                vertex.addNeighbor(j);
-               vertex.addCost(j, matrixRow[j]);
+               vertex.addCost(matrixRow[j]);
             }
          }
 

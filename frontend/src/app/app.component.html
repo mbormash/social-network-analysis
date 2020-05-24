@@ -1,48 +1,114 @@
+<ng-template #alertDialog style="border: red 4px solid; color: red">
+  <h2 matDialogTitle style="color: red">Перевірте матрицю</h2>
+  <p matDialogContent><em>Матриця заповнена невірно. Вона повинна бути симетричною та містити лише цифри 0 чи 1.
+    Зауважте, що пусті елементи матриці відповідають числу 0 (окрім сірих, які не потрібно заповнювати).</em></p>
+  <mat-dialog-actions>
+    <button mat-button matDialogClose>Скасувати</button>
+  </mat-dialog-actions>
+</ng-template>
 <div class="title">
-  Цей проект створений студентом групи КН-116а університету НТУ "ХПІ" Бормашенко Михайлом для дипломної роботи на тему<br>
+  Цей проект створений студентом групи КН-116а університету НТУ "ХПІ" Бормашенко Михайлом для дипломної роботи на
+  тему<br>
   <span class="subject">Прогнозування розвитку комунікацій на основі аналізу соціальних мереж</span><br>
   По всім питанням: <a href="mailto:mbormash@gmail.com">mbormash@gmail.com</a>
 </div>
 <div style="text-align: center" class="mt-5">
-  <button class="btn btn-primary btn-lg" type="submit">Демонстрація</button><br>
-  <button *ngIf="!isInputtingData" class="btn btn-primary btn-lg mt-4" type="submit" (click)="changeInput()">Ввести свої дані</button>
-  <button *ngIf="isInputtingData" class="btn btn-primary btn-lg mt-4" type="submit" (click)="changeInput()">Закрити введення даних (вони будуть втрачені)</button>
+  <button class="btn btn-primary btn-lg" type="submit" (click)="demo()">Демонстрація</button>
+  <br>
+  <button *ngIf="!isInputtingData" class="btn btn-primary btn-lg mt-4" type="submit" (click)="changeInput()">Ввести свої
+    дані
+  </button>
+  <button *ngIf="isInputtingData" class="btn btn-primary btn-lg mt-4" type="submit" (click)="changeInput()">Закрити
+    введення даних (вони будуть втрачені)
+  </button>
 </div>
 <div *ngIf="isInputtingData">
   <div class="input-group ml-5 mt-4" style="max-width: 300px;">
     Введіть кількість користувачів соціальної мережі. Це повинне бути число не менше 3.
-    <input id="inputNumUsers" type="text" class="form-control" placeholder="Кількість користувачів" aria-label="Кількість користувачів (мін. 3)"
-           aria-describedby="basic-addon2">
+    <input id="inputNumUsers" type="text" class="form-control" placeholder="Кількість користувачів"
+           aria-label="Кількість користувачів (мін. 3)"
+           aria-describedby="basic-addon2"
+           (keydown.enter)="showTable()">
     <div class="input-group-append">
       <button id="showTable" class="btn btn-outline-secondary" type="button" (click)="showTable()">Далі</button>
     </div>
   </div>
+</div>
 
-  <div class="table-responsive mt-4" *ngIf="isShowingTable">
-    <p class="ml-3">Заповніть матрицю відносин. Элементи повинні набувати значень 1, 0, чи не набувати ніякого.</p>
-    <p class="ml-3">Матриця повинна бути симметричною, діагональні элементи не повинні містити ніяких значень.</p>
-    <table class="table table-bordered">
-      <thead>
-      <tr>
-        <th></th>
-        <th *ngFor="let name of codeNames" style="text-align: center">{{name}}</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let name of codeNames" style="text-align: center">
-        <td style="font-weight: bold">{{name}}</td>
-        <td class="matrix-cell" *ngFor="let name of codeNames" contenteditable="true"></td>
-      </tr>
-      </tbody>
-    </table>
+<div class="table-responsive mt-4" *ngIf="isShowingTable">
+  <p class="ml-3">Заповніть матрицю відносин. Элементи повинні набувати значень 1, 0, чи не набувати ніякого.</p>
+  <p class="ml-3">Матриця повинна бути симметричною, діагональні элементи не повинні містити ніяких значень.</p>
+  <table class="table table-bordered">
+    <thead>
+    <tr>
+      <th></th>
+      <th *ngFor="let name of codeNames" style="text-align: center">{{name}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let name of codeNames; let i = index" style="text-align: center">
+      <td style="font-weight: bold">{{name}}</td>
+      <td class="matrix-cell" *ngFor="let name of codeNames; let j = index" [attr.contenteditable]="i!==j"
+          [style]="i === j ? 'background-color: grey' : ''"></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="isShowingTable">
+  <button class="btn btn-primary btn-lg mt-4" type="submit" (click)="predictCommunications()">Спрогнозувати розвиток
+  </button>
+</div>
+
+<div *ngIf="isShowingGraphs" class="graph">
+  <div class="row">
+    <div class="col-6"> Вхідні дані
+      <graph [nodes]="mainNodes" [links]="mainLinks"></graph>
+    </div>
+
+    <div class="col-6"> Метод спільних сусідів
+      <graph [nodes]="commonFriendsNodes" [links]="commonFriendsLinks"></graph>
+    </div>
   </div>
 
-  <div *ngIf="isShowingTable">
-    <button class="btn btn-primary btn-lg mt-4" type="submit" (click)="predictCommunications()">Спрогнозувати розвиток</button>
+  <div class="row">
+    <div class="col-6">Вхідні дані
+      <graph [nodes]="mainNodes" [links]="mainLinks"></graph>
+    </div>
+
+    <div class="col-6">Коефіцієнт Жаккара
+      <graph [nodes]="zhakkarNodes" [links]="zhakkarLinks"></graph>
+    </div>
   </div>
 
-  <div *ngIf="isShowingGraphs" class="graph">
-    <graph [nodes]="nodes" [links]="links"></graph>
+  <div class="row">
+    <div class="col-6">Вхідні дані
+      <graph [nodes]="mainNodes" [links]="mainLinks"></graph>
+    </div>
+
+    <div class="col-6">Коефіцієнт Адамік-Адара
+      <graph [nodes]="adamicAdarNodes" [links]="adamicAdarLinks"></graph>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-6">Вхідні дані
+      <graph [nodes]="mainNodes" [links]="mainLinks"></graph>
+    </div>
+
+    <div class="col-6">Аналіз досжності: пошук мінімального шляху
+      <graph [nodes]="minPathDijkstraNodes" [links]="minPathDijkstraLinks"></graph>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-6">Вхідні дані
+      <graph [nodes]="mainNodes" [links]="mainLinks"></graph>
+    </div>
+
+    <div class="col-6">Аналіз досжності: вирогідність зв'язку
+      <graph [nodes]="hitProbabilityNodes" [links]="hitProbabilityLinks"></graph>
+    </div>
   </div>
 </div>
 

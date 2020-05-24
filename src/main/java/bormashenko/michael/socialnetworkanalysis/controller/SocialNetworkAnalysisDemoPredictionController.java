@@ -27,6 +27,11 @@ public class SocialNetworkAnalysisDemoPredictionController {
       demoMatrix = Util.Conversion.convertUserListToMatrix(socialNetworkUsers);
    }
 
+   @GetMapping(value = "/matrix")
+   public Integer[][] getDemoMatrix() {
+      return demoMatrix;
+   }
+
    @GetMapping(value = "/common-friends")
    public Integer[][] predictByCommonFriends() {
       return socialNetworkAnalysisService.predictRelations(demoMatrix, new CommonFriendsPredictionService());

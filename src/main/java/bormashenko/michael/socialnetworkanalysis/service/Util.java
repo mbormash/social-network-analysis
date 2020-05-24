@@ -12,7 +12,7 @@ import java.util.Random;
 @Slf4j
 public class Util {
 
-   public static class CalculationUtil {
+   public static class Calculation {
 
       public static void normalizeMatrixByX(Integer[][] matrix) {
          for (int i = 0; i < matrix.length; i++) {
@@ -84,7 +84,7 @@ public class Util {
       }
 
       public static List<SocialNetworkUser> convertMatrixToUserList(Integer[][] matrix) {
-         if (!CalculationUtil.isRelationMatrixValid(matrix)) {
+         if (!Calculation.isRelationMatrixValid(matrix)) {
             throw new SNAnalysisException("Non valid relation matrix! Matrix should be quadrant, symmetric and diagonal elements should be null.");
          }
 

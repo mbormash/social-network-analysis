@@ -27,6 +27,10 @@ public class Graph {
          }
 
          Vertex vertex = vertexes.get(minIndex);
+         if (vertex.getNeighbors() == null) {
+            return null;
+         }
+
          for (int i = 0; i < vertex.getNeighbors().size(); i++) {
             int value = values[vertex.getIndex()] + vertex.getCosts().get(i);
             if (value < values[vertex.getNeighbors().get(i)]) {

@@ -16,7 +16,7 @@ public class Vertex {
 
    private List<Integer> neighbors;
 
-   private Map<Integer, Integer> costs;
+   private List<Integer> costs;
 
    public void addNeighbor(int index) {
       if (neighbors == null) {
@@ -26,12 +26,12 @@ public class Vertex {
       neighbors.add(index);
    }
 
-   public void addCost(int index, int cost) {
+   public void addCost(int cost) {
       if (costs == null) {
-         costs = new HashMap<>();
+         costs = new ArrayList<>();
       }
 
-      costs.put(index, cost);
+      costs.add(cost);
    }
 
 }

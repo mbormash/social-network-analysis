@@ -3,8 +3,8 @@ package bormashenko.michael.socialnetworkanalysis.service.prediction;
 import bormashenko.michael.socialnetworkanalysis.service.prediction.dijkstra.Converter;
 import bormashenko.michael.socialnetworkanalysis.service.prediction.dijkstra.Graph;
 
-import static bormashenko.michael.socialnetworkanalysis.service.Util.CalculationUtil.getRandomBooleanWithProbability;
-import static bormashenko.michael.socialnetworkanalysis.service.Util.CalculationUtil.normalizeMatrixByX;
+import static bormashenko.michael.socialnetworkanalysis.service.Util.Calculation.getRandomBooleanWithProbability;
+import static bormashenko.michael.socialnetworkanalysis.service.Util.Calculation.normalizeMatrixByX;
 
 public class MinPathByDijkstraPredictionService implements Prediction {
 
