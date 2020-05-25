@@ -14,7 +14,7 @@ export class AppComponent {
   constructor(private changeDetector: ChangeDetectorRef, private dialog: MatDialog) {
   }
 
-  url = 'http://localhost:8080/social-analysis/prediction';
+  url = 'http://SocialNetworkAnalysis-env.eba-mtjbwbch.eu-central-1.elasticbeanstalk.com/social-analysis/prediction';
   urlDemo = this.url + '/demo';
 
   mainNodes: Node[] = [];
