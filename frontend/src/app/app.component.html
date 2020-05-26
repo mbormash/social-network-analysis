@@ -61,53 +61,13 @@
 </div>
 
 <div *ngIf="isShowingGraphs" class="graph">
-  <div class="row">
-    <div class="col-6"> Вхідні дані
+  <div class="row" *ngFor="let graph of predictedGraphs">
+    <div class="col-lg-6 col-md-8 col-sm-12">Вхідні дані
       <graph [nodes]="mainNodes" [links]="mainLinks"></graph>
     </div>
 
-    <div class="col-6"> Метод спільних сусідів
-      <graph [nodes]="commonFriendsNodes" [links]="commonFriendsLinks"></graph>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-6">Вхідні дані
-      <graph [nodes]="mainNodes" [links]="mainLinks"></graph>
-    </div>
-
-    <div class="col-6">Коефіцієнт Жаккара
-      <graph [nodes]="zhakkarNodes" [links]="zhakkarLinks"></graph>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-6">Вхідні дані
-      <graph [nodes]="mainNodes" [links]="mainLinks"></graph>
-    </div>
-
-    <div class="col-6">Коефіцієнт Адамік-Адара
-      <graph [nodes]="adamicAdarNodes" [links]="adamicAdarLinks"></graph>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-6">Вхідні дані
-      <graph [nodes]="mainNodes" [links]="mainLinks"></graph>
-    </div>
-
-    <div class="col-6">Аналіз досжності: пошук мінімального шляху
-      <graph [nodes]="minPathDijkstraNodes" [links]="minPathDijkstraLinks"></graph>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-6">Вхідні дані
-      <graph [nodes]="mainNodes" [links]="mainLinks"></graph>
-    </div>
-
-    <div class="col-6">Аналіз досжності: вирогідність зв'язку
-      <graph [nodes]="hitProbabilityNodes" [links]="hitProbabilityLinks"></graph>
+    <div class="col-lg-6 col-md-8 col-sm-12">{{graph.name}}
+      <graph [nodes]="graph.nodes" [links]="graph.links"></graph>
     </div>
   </div>
 </div>

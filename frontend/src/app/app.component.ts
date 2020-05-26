@@ -17,30 +17,32 @@ export class AppComponent {
   url = 'http://SocialNetworkAnalysis-env.eba-mtjbwbch.eu-central-1.elasticbeanstalk.com/social-analysis/prediction';
   urlDemo = this.url + '/demo';
 
-  mainNodes: Node[] = [];
-  mainLinks: Link[] = [];
-
-  commonFriendsNodes: Node[] = [];
-  commonFriendsLinks: Link[] = [];
-
-  zhakkarNodes: Node[] = [];
-  zhakkarLinks: Link[] = [];
-
-  adamicAdarNodes: Node[] = [];
-  adamicAdarLinks: Link[] = [];
-
-  minPathDijkstraNodes: Node[] = [];
-  minPathDijkstraLinks: Link[] = [];
-
-  hitProbabilityNodes: Node[] = [];
-  hitProbabilityLinks: Link[] = [];
-
   isInputtingData = false;
   isShowingTable = false;
   isShowingGraphs = false;
 
   numberOfUsers;
   codeNames;
+
+  predictedGraphs: [{}, {}, {}, {}, {}];
+
+  mainNodes: Node[] = [];
+  mainLinks: Link[] = [];
+
+  private commonFriendsNodes: Node[] = [];
+  private commonFriendsLinks: Link[] = [];
+
+  private zhakkarNodes: Node[] = [];
+  private zhakkarLinks: Link[] = [];
+
+  private adamicAdarNodes: Node[] = [];
+  private adamicAdarLinks: Link[] = [];
+
+  private minPathDijkstraNodes: Node[] = [];
+  private minPathDijkstraLinks: Link[] = [];
+
+  private hitProbabilityNodes: Node[] = [];
+  private hitProbabilityLinks: Link[] = [];
 
   openAlertDialog() {
     this.dialog.closeAll();
@@ -68,8 +70,10 @@ export class AppComponent {
         this.demoPredictByZhakkar().then(r =>
           this.demoPredictByAdamicAdar().then(r =>
             this.demoPredictByMinPathDijkstra().then(r =>
-              this.demoPredictByHitProbability().then(r =>
-                this.isShowingGraphs = true))))));
+              this.demoPredictByHitProbability().then(r => {
+                this.generatePredictedGraphs();
+                this.isShowingGraphs = true
+              }))))));
   }
 
   changeInput() {
@@ -102,21 +106,6 @@ export class AppComponent {
         buttonElement.setAttribute("class", "btn btn-outline-secondary");
       }, 2000);
     }
-  }
-
-  private resetGraphs() {
-    this.mainNodes = [];
-    this.mainLinks = [];
-    this.commonFriendsNodes = [];
-    this.commonFriendsLinks = [];
-    this.zhakkarNodes = [];
-    this.zhakkarLinks = [];
-    this.adamicAdarNodes = [];
-    this.adamicAdarLinks = [];
-    this.minPathDijkstraNodes = [];
-    this.minPathDijkstraLinks = [];
-    this.hitProbabilityLinks = [];
-    this.hitProbabilityNodes = [];
   }
 
   predictCommunications() {
@@ -154,11 +143,58 @@ export class AppComponent {
         this.predictByZhakkar(relationsMatrix).then(r =>
           this.predictByAdamicAdar(relationsMatrix).then(r =>
             this.predictByMinPathDijkstra(relationsMatrix).then(r =>
-              this.predictByHitProbability(relationsMatrix).then(r =>
-                this.isShowingGraphs = true)))));
+              this.predictByHitProbability(relationsMatrix).then(r => {
+                this.generatePredictedGraphs();
+                this.isShowingGraphs = true
+              })))));
     } else {
       this.openAlertDialog();
     }
+  }
+
+  private resetGraphs() {
+    this.mainNodes = [];
+    this.mainLinks = [];
+    this.commonFriendsNodes = [];
+    this.commonFriendsLinks = [];
+    this.zhakkarNodes = [];
+    this.zhakkarLinks = [];
+    this.adamicAdarNodes = [];
+    this.adamicAdarLinks = [];
+    this.minPathDijkstraNodes = [];
+    this.minPathDijkstraLinks = [];
+    this.hitProbabilityLinks = [];
+    this.hitProbabilityNodes = [];
+
+    this.predictedGraphs = [{}, {}, {}, {}, {}];
+  }
+
+  private generatePredictedGraphs() {
+    this.predictedGraphs = [
+      {"name":"Метод спільних сусідів",
+        "nodes": this.commonFriendsNodes,
+        "links": this.commonFriendsLinks
+      },
+      {
+        "name":"Коефіцієнт Жаккара",
+        "nodes": this.zhakkarNodes,
+        "links": this.zhakkarLinks
+      },
+      {
+        "name":"Коефіцієнт Адамік-Адара",
+        "nodes": this.adamicAdarNodes,
+        "links": this.adamicAdarLinks
+      },
+      {
+        "name":"Аналіз досяжності: пошук мінімального шляху",
+        "nodes": this.minPathDijkstraNodes,
+        "links": this.minPathDijkstraLinks
+      },
+      {"name":"Аналіз досяжності: вирогідність зв'язку",
+        "nodes": this.hitProbabilityNodes,
+        "links": this.hitProbabilityLinks
+      }
+    ];
   }
 
   private pushMatrixToGraph(relationsMatrix, graphMode) {
