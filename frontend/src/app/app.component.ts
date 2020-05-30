@@ -14,7 +14,7 @@ export class AppComponent {
   constructor(private changeDetector: ChangeDetectorRef, private dialog: MatDialog) {
   }
 
-  url = 'http://SocialNetworkAnalysis-env.eba-mtjbwbch.eu-central-1.elasticbeanstalk.com/social-analysis/prediction';
+  url = 'http://ec2-18-197-142-208.eu-central-1.compute.amazonaws.com/social-analysis/prediction';
   urlDemo = this.url + '/demo';
 
   isInputtingData = false;
@@ -190,7 +190,7 @@ export class AppComponent {
         "nodes": this.minPathDijkstraNodes,
         "links": this.minPathDijkstraLinks
       },
-      {"name":"Аналіз досяжності: вирогідність зв'язку",
+      {"name":"Аналіз досяжності: вірогідність зв'язку",
         "nodes": this.hitProbabilityNodes,
         "links": this.hitProbabilityLinks
       }
